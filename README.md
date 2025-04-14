@@ -37,17 +37,3 @@ A web-based Human Resource Management System (HRMS) developed using **Flask** an
 
 ---
 
-## 📁 Project Structure
-
-/hrms-flask │ 
-            ├── static/ 
-                 └── CSS, JS, Images │
-            ├── templates/ 
-               └──
-                 ├── home.html 
-                 ├── login.html 
-                 ├── admin_dashboard.html │ 
-                 ├── emp_dashboard.html │ 
-                 └── ... │
-            ├── app.py 
-            └── README.md
