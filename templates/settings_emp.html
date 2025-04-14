@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Settings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #f7f9fc;
+            display: flex;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        body.dark-mode {
+            background: #1d1f28;
+            color: #fff;
+        }
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #4e73df, #2d3a49);
+            color: white;
+            height: 100vh;
+            padding: 30px 20px;
+            position: fixed;
+            box-shadow: 4px 0px 15px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar h2 {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li a {
+            padding: 15px;
+            font-size: 18px;
+            color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            transition: background 0.3s ease, padding-left 0.3s ease;
+            text-decoration: none;
+        }
+        .sidebar ul li a:hover, .sidebar ul li.active {
+            background: #3c4a61;
+            padding-left: 25px;
+            color: #fff;
+        }
+        .sidebar ul li a i {
+            font-size: 22px;
+        }
+        .main-content {
+            margin-left: 300px;
+            padding: 40px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .navbar {
+            background: #fff;
+            padding: 20px 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .navbar h3 {
+            font-size: 22px;
+            color: #333;
+        }
+        .setting-form {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        .setting-form label {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .setting-form input, .setting-form select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+        .setting-form button {
+            background: #4e73df;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .setting-form button:hover {
+            background: #375a8c;
+        }
+        .profile-pic-container {
+            margin-bottom: 20px;
+        }
+        .profile-pic-container img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .password-strength {
+            margin-top: -10px;
+            font-size: 14px;
+            color: #d9534f;
+        }
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #fff;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+        footer p {
+            margin: 0;
+            color: #888;
+            font-size: 14px;
+        }
+        .dark-mode-toggle {
+            background: #4e73df;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>EmployeeZone</h2>
+        <ul>
+            <li><a href="{{ url_for('emp_dashboard') }}"><i class="fa fa-tachometer-alt"></i> Dashboard</a></li>
+          
+            <li><a href="{{ url_for('timesheet') }}"><i class="fa fa-clock"></i> Timesheet</a></li>
+            <li><a href="{{ url_for('notifications') }}"><i class="fa fa-bell"></i> Notifications</a></li>
+            <li><a href="{{ url_for('helpdesk') }}"><i class="fa fa-life-ring"></i> Helpdesk</a></li>
+            <li><a href="{{ url_for('settings_emp') }}" class="active"><i class="fa fa-cogs"></i> Settings</a></li>
+            <li><a href="{{ url_for('logout') }}"><i class="fa fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="navbar">
+            <h3>Employee Settings</h3>
+            <button class="dark-mode-toggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+        </div>
+
+        <div class="setting-form">
+            <h4>Update Your Details</h4>
+
+            <form action="{{ url_for('update_settings') }}" method="POST" enctype="multipart/form-data">
+                <div class="profile-pic-container">
+                    <img src="https://via.placeholder.com/150" alt="Profile Picture" id="profilePic">
+                    <input type="file" name="profile_pic" accept="image/*" onchange="previewProfilePic(event)">
+                </div>
+
+                <label for="full_name">Full Name</label>
+                <input type="text" id="full_name" name="full_name" placeholder="Enter your full name" required>
+
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter a new password" required>
+                <div class="password-strength" id="passwordStrength"></div>
+
+                <button type="submit">Save Changes</button>
+            </form>
+
+        </div>
+
+    </div>
+
+   
+
+    <script>
+        // Password Strength Meter
+        const passwordInput = document.getElementById('password');
+        const passwordStrength = document.getElementById('passwordStrength');
+
+        passwordInput.addEventListener('input', function() {
+            const passwordValue = passwordInput.value;
+            let strength = 'Weak';
+
+            if (passwordValue.length > 8 && /[A-Z]/.test(passwordValue) && /\d/.test(passwordValue)) {
+                strength = 'Strong';
+            } else if (passwordValue.length > 5) {
+                strength = 'Medium';
+            }
+
+            passwordStrength.textContent = `Password Strength: ${strength}`;
+        });
+
+        // Dark Mode Toggle
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        // Profile Picture Preview
+        function previewProfilePic(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('profilePic').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+
+</body>
+</html>

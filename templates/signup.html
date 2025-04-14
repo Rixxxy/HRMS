@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRMS | Sign Up</title>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #0046A8, #001F4D);
+        }
+        .container {
+            background: white;
+            padding: 50px;
+            width: 550px;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        .container h2 {
+            font-size: 28px;
+            color: #0046A8;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        .icon {
+            font-size: 50px;
+            color: #0046A8;
+            margin-bottom: 15px;
+        }
+        .flash-message {
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .flash-message.error {
+            background: #FFCDD2;
+            color: #D32F2F;
+        }
+        .flash-message.success {
+            background: #C8E6C9;
+            color: #388E3C;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 14px;
+            font-size: 17px;
+            border-radius: 10px;
+            margin-top: 12px;
+            border: none;
+            transition: 0.3s ease;
+        }
+        input, select {
+            border: 1px solid #ccc;
+            background: #f9f9f9;
+        }
+        input:focus, select:focus {
+            border-color: #0046A8;
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 70, 168, 0.5);
+        }
+        button {
+            background: linear-gradient(90deg, #0046A8, #002F6C);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 70, 168, 0.3);
+        }
+        button:hover {
+            background: linear-gradient(90deg, #002F6C, #001F4D);
+        }
+        .login-link {
+            margin-top: 15px;
+            font-size: 16px;
+            color: #333;
+        }
+        .login-link a {
+            color: #0046A8;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            display: none;
+            text-align: left;
+            margin-top: -8px;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <i class="icon fas fa-user-plus"></i>
+        <h2>Sign Up</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <p class="flash-message {{ category }}">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('signup') }}" method="post" onsubmit="return validateForm()">
+            <input type="text" id="name" name="full_name" placeholder="Full Name" required>
+        
+            <input type="text" id="username" name="username" placeholder="Username" required>
+            
+            <input type="text" id="empid" name="empid" placeholder="Employee ID" required>
+        
+            <input type="email" id="email" name="email" placeholder="Email" required>
+        
+            <input type="text" id="phone" name="phone" placeholder="Phone Number" required>
+        
+            <input type="date" id="dob" name="date_of_birth" placeholder="Date of Birth" required>
+        
+            <select name="role" id="role" required>
+                
+                <option value="employee">Employee</option>
+            </select>
+        
+            <input type="text" id="department" name="department" placeholder="Department" required>
+        
+            <input type="password" id="password" name="password" placeholder="Create Password" required>
+            <span class="error-message" id="password-error">Password must be at least 6 characters</span>
+        
+            <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm Password" required>
+            <span class="error-message" id="confirm-error">Passwords do not match</span>
+        
+            <button type="submit">Sign Up</button>
+        </form>
+        
+        
+
+        <p class="login-link">Already have an account? <a href="/">Login</a></p>
+    </div>
+
+    <script>
+        function validateForm() {
+            let password = document.getElementById("password").value;
+            let confirmPassword = document.getElementById("confirm-password").value;
+            let passwordError = document.getElementById("password-error");
+            let confirmError = document.getElementById("confirm-error");
+            let valid = true;
+
+            if (password.length < 6) {
+                passwordError.style.display = "block";
+                valid = false;
+            } else {
+                passwordError.style.display = "none";
+            }
+
+            if (password !== confirmPassword) {
+                confirmError.style.display = "block";
+                valid = false;
+            } else {
+                confirmError.style.display = "none";
+            }
+
+            return valid;
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Attendance</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      background: #f4f5f7;
+    }
+
+    .sidebar {
+      width: 250px;
+      background: #1e3a8a;
+      color: white;
+      height: 100vh;
+      padding: 15px;
+      position: fixed;
+    }
+
+    .sidebar h2 {
+      text-align: center;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar ul li a {
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: 0.3s;
+      color: white;
+      text-decoration: none;
+    }
+
+    .sidebar ul li a:hover,
+    .sidebar ul li.active a {
+      background: #2563eb;
+      border-radius: 5px;
+    }
+
+    .main-content {
+      margin-left: 270px;
+      padding: 20px;
+      flex: 1;
+    }
+
+    .navbar {
+      background: white;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+
+    .dashboard {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      flex: 1;
+      text-align: center;
+      min-width: 220px;
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h3 {
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .link_color {
+      color: white;
+      text-decoration: none !important;
+    }
+
+    .attendance-controls {
+      margin: 25px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .attendance-controls input[type="text"],
+    .attendance-controls select {
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      outline: none;
+      min-width: 200px;
+      font-family: 'Poppins';
+    }
+
+    .attendance-table {
+      width: 100%;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      overflow: hidden;
+      margin-top: 20px;
+    }
+
+    .attendance-table table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .attendance-table th, .attendance-table td {
+      padding: 12px 15px;
+      text-align: left;
+    }
+
+    .attendance-table th {
+      background-color: #1e3a8a;
+      color: white;
+    }
+
+    .attendance-table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .progress-bar {
+      width: 100%;
+      background-color: #eee;
+      border-radius: 5px;
+      overflow: hidden;
+      height: 10px;
+      margin-top: 5px;
+    }
+
+    .progress-bar-inner {
+      height: 10px;
+      background-color: #1e3a8a;
+      width: 85%;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 200px;
+      }
+
+      .main-content {
+        margin-left: 210px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>HRMS Admin</h2>
+    <ul>
+      <li><a href="{{ url_for('admin_dashboard') }}" class="link_color"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+      <li><a href="{{ url_for('employees') }}" class="link_color"><i class="fas fa-users"></i> Employees</a></li>
+      <li class="active"><a href="{{ url_for('attendance') }}" class="link_color"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+      <li><a href="{{ url_for('timesheet_approval') }}" class="link_color"><i class="fas fa-clipboard-list"></i> Timesheet Approval</a></li>
+      <li><a href="{{ url_for('reports') }}" class="link_color"><i class="fas fa-chart-bar"></i> Reports</a></li>
+      <li><a href="{{ url_for('settings') }}" class="link_color"><i class="fas fa-cogs"></i> Settings</a></li>
+      <li><a href="{{ url_for('logout') }}" class="link_color"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+  </div>
+
+  <div class="main-content">
+    <div class="navbar">
+      <h3>Attendance</h3>
+      <div class="user-profile"><i class="fas fa-user-circle"></i> Admin</div>
+    </div>
+
+    <div class="dashboard">
+      <div class="card">
+        <h3>Today's Attendance</h3>
+        <p>85% Present</p>
+        <div class="progress-bar"><div class="progress-bar-inner"></div></div>
+      </div>
+      <div class="card">
+        <h3>Absent Employees</h3>
+        <p>15 Employees</p>
+      </div>
+      <div class="card">
+        <h3>Leave Requests</h3>
+        <p>4 Pending</p>
+      </div>
+    </div>
+
+    <div class="attendance-controls">
+      <input type="text" placeholder="Search by name..." />
+      <select>
+        <option value="all">All Departments</option>
+        <option value="hr">HR</option>
+        <option value="dev">Development</option>
+        <option value="sales">Sales</option>
+      </select>
+    </div>
+
+    <div class="attendance-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Employee Name</th>
+            <th>Department</th>
+            <th>Status</th>
+            <th>Check-In</th>
+            <th>Check-Out</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Rahul Sharma</td>
+            <td>Development</td>
+            <td style="color: green;">Present</td>
+            <td>09:05 AM</td>
+            <td>06:00 PM</td>
+          </tr>
+          <tr>
+            <td>Anita Das</td>
+            <td>HR</td>
+            <td style="color: red;">Absent</td>
+            <td>-</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>Mohit Singh</td>
+            <td>Sales</td>
+            <td style="color: orange;">On Leave</td>
+            <td>-</td>
+            <td>-</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

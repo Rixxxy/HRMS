@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HRMS Admin Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { margin: 0; font-family: 'Poppins', sans-serif; display: flex; background: #f4f5f7; }
+    .sidebar { width: 250px; background: #1e3a8a; color: white; height: 100vh; padding: 15px; position: fixed; }
+    .sidebar h2 { text-align: center; font-weight: 600; margin-bottom: 20px; }
+    .sidebar ul { list-style: none; padding: 0; }
+    .sidebar ul li a { padding: 15px; display: flex; align-items: center; gap: 10px; color: white; text-decoration: none; transition: 0.3s; }
+    .sidebar ul li a:hover, .sidebar ul li.active a { background: #2563eb; border-radius: 5px; }
+    .main-content { margin-left: 270px; padding: 20px; flex: 1; }
+    .navbar { background: white; padding: 15px; display: flex; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-radius: 8px; }
+    .dashboard { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
+    .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); flex: 1; text-align: center; min-width: 200px; }
+    .card h3 { font-weight: 600; }
+    .chart-container { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin-top: 30px; }
+    .table-container { margin-top: 30px; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { padding: 12px 15px; border-bottom: 1px solid #ddd; text-align: left; }
+    th { background-color: #f0f0f0; }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>HRMS Admin</h2>
+    <ul>
+      <li><a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+      <li><a href="{{ url_for('employees') }}"><i class="fas fa-users"></i> Employees</a></li>
+      <li><a href="{{ url_for('attendance') }}"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+      <li><a href="{{ url_for('timesheet_approval') }}"><i class="fas fa-clipboard-list"></i> Timesheet Approval</a></li>
+      <li class="active"><a href="{{ url_for('reports') }}"><i class="fas fa-chart-bar"></i> Reports</a></li>
+      <li><a href="{{ url_for('settings') }}"><i class="fas fa-cogs"></i> Settings</a></li>
+      <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+  </div>
+
+  <div class="main-content">
+    <div class="navbar">
+      <h3>Reports</h3>
+      <div><i class="fas fa-user-circle"></i> Admin</div>
+    </div>
+
+    <div class="dashboard">
+      <div class="card">
+        <h3>Monthly Attendance</h3>
+        <p>View attendance trends</p>
+      </div>
+      <div class="card">
+        <h3>Payroll Reports</h3>
+        <p>Download pay statements</p>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <h3>Attendance Overview (Last 6 Months)</h3>
+      <canvas id="attendanceChart"></canvas>
+    </div>
+
+    <div class="table-container">
+      <h3>Recent Payroll Summary</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Employee</th>
+            <th>Department</th>
+            <th>Month</th>
+            <th>Salary</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Aryan Shetty</td><td>Engineering</td><td>March</td><td>₹80,000</td><td>Paid</td></tr>
+          <tr><td>Shruthi Rao</td><td>Marketing</td><td>March</td><td>₹65,000</td><td>Pending</td></tr>
+          <tr><td>Manoj Patil</td><td>HR</td><td>March</td><td>₹70,000</td><td>Paid</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-container">
+      <h3>Timesheet Report</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Employee</th>
+            <th>Date</th>
+            <th>Hours Worked</th>
+            <th>Approval Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Aryan Shetty</td><td>2025-04-01</td><td>8</td><td>Approved</td></tr>
+          <tr><td>Shruthi Rao</td><td>2025-04-01</td><td>7</td><td>Pending</td></tr>
+          <tr><td>Manoj Patil</td><td>2025-04-01</td><td>8</td><td>Approved</td></tr>
+          <tr><td>Aryan Shetty</td><td>2025-04-02</td><td>9</td><td>Approved</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <script>
+    const ctx = document.getElementById('attendanceChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr'],
+        datasets: [{
+          label: 'Attendance %',
+          data: [88, 85, 91, 87, 90, 86],
+          backgroundColor: '#2563eb',
+          borderRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: ctx => `${ctx.parsed.y}%`
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100,
+            ticks: {
+              callback: val => val + '%'
+            }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Timesheet</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #f7f9fc;
+      display: flex;
+    }
+    .sidebar {
+      width: 280px;
+      background: linear-gradient(180deg, #4e73df, #2d3a49);
+      color: white;
+      height: 100vh;
+      padding: 30px 20px;
+      position: fixed;
+      box-shadow: 4px 0px 15px rgba(0, 0, 0, 0.1);
+    }
+    .sidebar h2 {
+      text-align: center;
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 30px;
+      color: #fff;
+    }
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+    .sidebar ul li a {
+      padding: 15px;
+      font-size: 18px;
+      color: #e0e0e0;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      transition: background 0.3s ease, padding-left 0.3s ease;
+      text-decoration: none;
+    }
+    .sidebar ul li a:hover, .sidebar ul li.active a {
+      background: #3c4a61;
+      padding-left: 25px;
+      color: #fff;
+    }
+    .sidebar ul li a i {
+      font-size: 22px;
+    }
+    .main-content {
+      margin-left: 300px;
+      padding: 40px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    h2 {
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+    form {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+    }
+    form label {
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 5px;
+      display: block;
+    }
+    form input {
+      padding: 10px;
+      width: 100%;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-size: 16px;
+      outline: none;
+    }
+    form input:focus {
+      border-color: #4e73df;
+    }
+    form button {
+      background-color: #4e73df;
+      color: #fff;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    form button:hover {
+      background-color: #2e59d9;
+      transform: translateY(-2px);
+    }
+    .timesheet-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .timesheet-table th, .timesheet-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    .timesheet-table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    .timesheet-table th {
+      background-color: #4e73df;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>EmployeeZone</h2>
+    <ul>
+      <li><a href="{{ url_for('emp_dashboard') }}"><i class="fa fa-tachometer-alt"></i> Dashboard</a></li>
+      <li class="active"><a href="{{ url_for('timesheet') }}"><i class="fa fa-clock"></i> Timesheet</a></li>
+      <li><a href="{{ url_for('notifications') }}"><i class="fa fa-bell"></i> Notifications</a></li>
+      <li><a href="{{ url_for('helpdesk') }}"><i class="fa fa-life-ring"></i> Helpdesk</a></li>
+      <li><a href="{{ url_for('settings_emp') }}"><i class="fa fa-cogs"></i> Settings</a></li>
+      <li><a href="{{ url_for('logout') }}"><i class="fa fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+  </div>
+
+  <div class="main-content">
+    <h2>My Timesheet</h2>
+
+    <!-- Timesheet Form -->
+    <form method="POST">
+      <label for="date">Date:</label>
+      <input type="date" name="date" id="date" required>
+      <label for="hours_worked">Hours Worked:</label>
+      <input type="number" name="hours_worked" id="hours_worked" required>
+      <label for="task_description">Task Description:</label>
+      <input type="text" name="task_description" id="task_description">
+      <button type="submit">Update Timesheet</button>
+    </form>
+
+    <!-- Timesheet Entries -->
+    <h3>Previous Entries</h3>
+    <table class="timesheet-table">
+      <tr>
+        <th>Date</th>
+        <th>Hours Worked</th>
+        <th>Task Description</th>
+      </tr>
+      <tr>
+        <td>2025-03-29</td>
+        <td>8</td>
+        <td>Developed new feature for Employee Dashboard</td>
+      </tr>
+      <tr>
+        <td>2025-03-28</td>
+        <td>7</td>
+        <td>Fixed bugs in the timesheet module</td>
+      </tr>
+      <tr>
+        <td>2025-03-27</td>
+        <td>6</td>
+        <td>Completed unit tests for login module</td>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>

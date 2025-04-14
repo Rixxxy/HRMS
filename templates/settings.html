@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Settings</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            background: #f4f5f7;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .sidebar {
+            width: 250px;
+            background: #1e3a8a;
+            color: white;
+            height: 100%;
+            padding: 20px 15px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+        }
+        .sidebar h2 {
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li a {
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .sidebar ul li a:hover, .sidebar ul li.active a {
+            background: #2563eb;
+        }
+        .main-content {
+            margin-left: 270px;
+            padding: 30px;
+            flex: 1;
+            overflow-y: auto;
+        }
+        .settings-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: auto;
+        }
+        h2, h3 {
+            color: #1e3a8a;
+            margin-bottom: 10px;
+        }
+        form label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: 600;
+        }
+        form input, form select, .file-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        .password-container {
+            position: relative;
+        }
+        .password-container input {
+            padding-right: 40px;
+        }
+        .password-container i {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+        }
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+            margin-left: 10px;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            border-radius: 24px;
+            transition: 0.3s;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+        input:checked + .slider {
+            background-color: #1e3a8a;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        form button {
+            margin-top: 15px;
+            padding: 10px;
+            background: #1e3a8a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        form button:hover {
+            background: #2563eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2 style="color:white">HRMS Admin</h2>
+        <ul>
+            <li><a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="{{ url_for('employees') }}"><i class="fas fa-users"></i> Employees</a></li>
+            <li><a href="{{ url_for('attendance') }}"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+            <li><a href="{{ url_for('timesheet_approval') }}"><i class="fas fa-clipboard-list"></i> Timesheet Approval</a></li>
+            <li><a href="{{ url_for('reports') }}"><i class="fas fa-chart-bar"></i> Reports</a></li>
+            <li class="active"><a href="{{ url_for('settings') }}"><i class="fas fa-cogs"></i> Settings</a></li>
+            <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </div>
+    
+    <div class="main-content">
+        <div class="settings-container">
+            <h2>Admin Settings</h2>
+            <p>Manage system settings and user configurations here.</p>
+            
+            <form action="{{ url_for('settings') }}" method="POST" enctype="multipart/form-data">
+                <h3>Change Username</h3>
+                <label for="current_admin_username">Current Admin Username:</label>
+                <input type="text" name="current_admin_username" id="current_admin_username" required>
+
+                <label for="new_admin_username">New Admin Username:</label>
+                <input type="text" name="new_admin_username" id="new_admin_username" required>
+
+               
+
+                <h3>Change Passwords</h3>
+                <label for="current_admin_password">Current Admin Password:</label>
+                <div class="password-container">
+                    <input type="password" name="current_admin_password" id="current_admin_password" required>
+                    <i class="fas fa-eye" onclick="togglePassword('current_admin_password', this)"></i>
+                </div>
+                <label for="new_admin_password">New Admin Password:</label>
+                <div class="password-container">
+                    <input type="password" name="new_admin_password" id="new_admin_password" required>
+                    <i class="fas fa-eye" onclick="togglePassword('new_admin_password', this)"></i>
+                </div>
+
+                <h3>Profile Picture</h3>
+                <label for="profile_picture">Upload New Profile Picture:</label>
+                <input type="file" name="profile_picture" id="profile_picture" class="file-input">
+
+                <h3>Two-Factor Authentication</h3>
+                <label for="enable_2fa">Enable 2FA:</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" name="enable_2fa">
+                    <span class="slider"></span>
+                </label>
+
+                <h3>System Settings</h3>
+                <label for="theme">Dashboard Theme:</label>
+                <select name="theme" id="theme">
+                    <option value="light">Light</option>
+                    <option value="dark">Dark</option>
+                </select>
+
+                <h3>Manage Notifications</h3>
+                <label>Email Notifications
+                    <label class="toggle-switch">
+                        <input type="checkbox" name="email_notifications">
+                        <span class="slider"></span>
+                    </label>
+                </label>
+                <label>SMS Notifications
+                    <label class="toggle-switch">
+                        <input type="checkbox" name="sms_notifications">
+                        <span class="slider"></span>
+                    </label>
+                </label>
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

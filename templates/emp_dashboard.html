@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EmployeeZone Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #f7f9fc;
+            display: flex;
+        }
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #4e73df, #2d3a49);
+            color: white;
+            height: 100vh;
+            padding: 30px 20px;
+            position: fixed;
+            box-shadow: 4px 0px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .sidebar h2 {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li a {
+            padding: 15px;
+            font-size: 18px;
+            color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            transition: background 0.3s ease, padding-left 0.3s ease;
+            text-decoration: none; /* Remove underline */
+        }
+        .sidebar ul li a:hover, .sidebar ul li.active {
+            background: #3c4a61;
+            padding-left: 25px;
+            color: #fff;
+        }
+        .sidebar ul li a i {
+            font-size: 22px;
+        }
+        .main-content {
+            margin-left: 300px;
+            padding: 40px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .navbar {
+            background: #fff;
+            padding: 20px 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .navbar h3 {
+            font-size: 22px;
+            color: #333;
+        }
+        .navbar button {
+            background-color: #4e73df;
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .navbar button:hover {
+            background-color: #2e59d9;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        .card {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+        }
+        .card h2 {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: #333;
+        }
+        .card p {
+            font-size: 16px;
+            color: #555;
+            margin: 12px 0;
+        }
+        .card button {
+            background-color: #4e73df;
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .card button:hover {
+            background-color: #2e59d9;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #fff;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+        footer p {
+            margin: 0;
+            color: #888;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>EmployeeZone</h2>
+        <ul>
+            <li><a href="{{ url_for('emp_dashboard') }}"><i class="fa fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="{{ url_for('timesheet') }}"><i class="fa fa-clock"></i> Timesheet</a></li>
+            <li><a href="{{ url_for('notifications') }}"><i class="fa fa-bell"></i> Notifications</a></li>
+            <li><a href="{{ url_for('helpdesk') }}"><i class="fa fa-life-ring"></i> Helpdesk</a></li>
+            <li><a href="{{ url_for('settings_emp') }}"><i class="fa fa-cogs"></i> Settings</a></li>
+            <li><a href="{{ url_for('logout') }}"><i class="fa fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="navbar">
+            <h3>EmployeeZone Dashboard</h3>
+        </div>
+
+        <div class="dashboard">
+            <!-- Employee Directory Card -->
+            <div class="card">
+                <h2>Employee Directory</h2>
+                <p>Alice Johnson <button>View</button></p>
+                <p>Bob Smith <button>View</button></p>
+                <p>Charlie Brown <button>View</button></p>
+            </div>
+
+            <!-- HR Notifications Card -->
+            <div class="card">
+                <h2>HR Notifications</h2>
+                <p>New holiday policy announced.</p>
+                <p>Performance reviews scheduled for next week.</p>
+                <p>Annual company retreat details released.</p>
+            </div>
+
+            <!-- Timesheet Management Card -->
+            <div class="card">
+                <h2>Timesheet Management</h2>
+                <p>Alice Johnson: 40 hours</p>
+                <p>Bob Smith: 38 hours</p>
+                <p>Charlie Brown: 42 hours</p>
+            </div>
+
+            <!-- Helpdesk & Support Card -->
+            <div class="card">
+                <h2>Helpdesk & Support</h2>
+                <button>Submit a Ticket</button>
+                <button>Live Chat</button>
+            </div>
+
+            <!-- Task Management Card -->
+            <div class="card">
+                <h2>Task Management</h2>
+                <p>Complete the quarterly report <button>Mark as Completed</button></p>
+                <p>Attend the team meeting <button>Mark as Completed</button></p>
+                <p>Prepare the presentation <button>Mark as Completed</button></p>
+            </div>
+
+            <!-- Attendance Summary Card -->
+            <div class="card">
+                <h2>Attendance Summary</h2>
+                <p>Total Days Worked: 20</p>
+                <p>Leave Taken: 2</p>
+                <p>Present Days: 18</p>
+                <button>View Attendance Details</button>
+            </div>
+
+            <!-- Performance Insights Card -->
+            <div class="card">
+                <h2>Performance Insights</h2>
+                <p>Task Completion Rate: 85%</p>
+                <p>Performance Rating: 4.2/5</p>
+                <p>Goals Achieved: 5 out of 7</p>
+                <button>View Performance Review</button>
+            </div>
+
+            <!-- Upcoming Events Calendar Card -->
+            <div class="card">
+                <h2>Upcoming Events</h2>
+                <p>April 15: Quarterly Meeting</p>
+                <p>April 30: Team Building Event</p>
+                <p>May 5: Annual Conference</p>
+                <button>View Calendar</button>
+            </div>
+        </div>
+
+    </div>
+
+ 
+
+</body>
+</html>

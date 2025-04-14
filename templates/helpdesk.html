@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helpdesk</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #f7f9fc;
+            display: flex;
+        }
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #4e73df, #2d3a49);
+            color: white;
+            height: 100vh;
+            padding: 30px 20px;
+            position: fixed;
+            box-shadow: 4px 0px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .sidebar h2 {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li a {
+            padding: 15px;
+            font-size: 18px;
+            color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            transition: background 0.3s ease, padding-left 0.3s ease;
+            text-decoration: none;
+        }
+        .sidebar ul li a:hover, .sidebar ul li.active {
+            background: #3c4a61;
+            padding-left: 25px;
+            color: #fff;
+        }
+        .sidebar ul li a i {
+            font-size: 22px;
+        }
+        .main-content {
+            margin-left: 300px;
+            padding: 40px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .navbar {
+            background: #fff;
+            padding: 20px 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .navbar h3 {
+            font-size: 22px;
+            color: #333;
+        }
+        .helpdesk-ticket {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            word-wrap: break-word;
+        }
+        .ticket-header {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .ticket-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        .ticket-actions button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .ticket-actions button:hover {
+            background-color: #f1f1f1;
+        }
+        .ticket-actions .resolve {
+            background-color: #28a745;
+            color: white;
+        }
+        .ticket-actions .in-progress {
+            background-color: #ffc107;
+            color: white;
+        }
+        .ticket-actions .delete {
+            background-color: #dc3545;
+            color: white;
+        }
+        .footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #fff;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .footer p {
+            margin: 0;
+            color: #888;
+            font-size: 14px;
+        }
+        @media screen and (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                box-shadow: none;
+            }
+            .sidebar ul li a {
+                font-size: 16px;
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>EmployeeZone</h2>
+        <ul>
+            <li><a href="{{ url_for('emp_dashboard') }}"><i class="fa fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="{{ url_for('timesheet') }}"><i class="fa fa-clock"></i> Timesheet</a></li>
+            <li><a href="{{ url_for('notifications') }}"><i class="fa fa-bell"></i> Notifications</a></li>
+            <li><a href="{{ url_for('helpdesk') }}"><i class="fa fa-life-ring"></i> Helpdesk</a></li>
+            <li><a href="{{ url_for('settings_emp') }}"><i class="fa fa-cogs"></i> Settings</a></li>
+            <li><a href="{{ url_for('logout') }}"><i class="fa fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="navbar">
+            <h3>Helpdesk Tickets</h3>
+        </div>
+
+        <div class="helpdesk-ticket">
+            <div class="ticket-header">
+                <strong>Issue:</strong> Employee unable to log into the system
+                <br><strong>Date Created:</strong> 2025-04-01
+            </div>
+            <p><strong>Description:</strong> Employee has reported that they cannot log into the employee portal despite multiple attempts.</p>
+            <br><strong>Status:</strong> In Progress
+            <div class="ticket-actions">
+                <button class="resolve">Resolve</button>
+                <button class="in-progress">In Progress</button>
+                <button class="delete">Delete</button>
+            </div>
+        </div>
+
+        <div class="helpdesk-ticket">
+            <div class="ticket-header">
+                <strong>Issue:</strong> Request for additional hardware resources
+                <br><strong>Date Created:</strong> 2025-03-28
+            </div>
+            <p><strong>Description:</strong> A request for additional RAM and storage space for a new project.</p>
+            <br><strong>Status:</strong> Resolved
+            <div class="ticket-actions">
+                <button class="resolve">Resolve</button>
+                <button class="in-progress">In Progress</button>
+                <button class="delete">Delete</button>
+            </div>
+        </div>
+
+        <div class="helpdesk-ticket">
+            <div class="ticket-header">
+                <strong>Issue:</strong> Software installation failed
+                <br><strong>Date Created:</strong> 2025-04-01
+            </div>
+            <p><strong>Description:</strong> The installation of required software on the employee's machine was unsuccessful.</p>
+            <br><strong>Status:</strong> New
+            <div class="ticket-actions">
+                <button class="resolve">Resolve</button>
+                <button class="in-progress">In Progress</button>
+                <button class="delete">Delete</button>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>
